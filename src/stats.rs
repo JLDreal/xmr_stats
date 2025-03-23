@@ -3,8 +3,8 @@ use reqwest::blocking::get;
 use std::error::Error;
 use ratatui::{
     
-    style::{Color, Style},
-    text::{Span, Spans},
+    style::{Color, Style}, text::{Line, Span},
+    
     
 };
 
@@ -77,31 +77,37 @@ impl Stats {
         println!("Last Reward: {}", self.last_reward);
         println!("Last Timestamp: {}", self.last_timestamp);
     }
-    pub fn to_spans(&self) -> Vec<Spans> {
+    
+    pub fn to_spans(&self) -> Vec<Line> {
+        let color = Color::Blue;
         vec![
-            Spans::from(vec![
-                Span::raw("Difficulty: "),
-                Span::styled(self.difficulty.to_string(), Style::default().fg(Color::Yellow)),
+            Line::from(vec![
+                Span::styled("Difficulty: ", Style::default().fg(color)),
+                Span::raw(self.difficulty.to_string()),
             ]),
-            Spans::from(vec![
-                Span::raw("Height: "),
-                Span::styled(self.height.to_string(), Style::default().fg(Color::Yellow)),
+            Line::from(vec![
+                Span::styled("Height: ", Style::default().fg(color)),
+                Span::raw(self.height.to_string()),
+                
             ]),
-            Spans::from(vec![
-                Span::raw("Hashrate: "),
-                Span::styled(format!("{:.2} H/s", self.hashrate), Style::default().fg(Color::Yellow)),
+            Line::from(vec![
+                Span::styled("Hashrate: ", Style::default().fg(color)),
+                Span::raw(format!("{:.2} Mh/s", self.hashrate)),
+                
             ]),
-            Spans::from(vec![
-                Span::raw("Total Emission: "),
-                Span::styled(self.total_emission.to_string(), Style::default().fg(Color::Yellow)),
+            Line::from(vec![
+                Span::styled("Total Emission: ", Style::default().fg(color)),
+                Span::raw(self.total_emission.to_string()),
+                
             ]),
-            Spans::from(vec![
-                Span::raw("Last Reward: "),
-                Span::styled(self.last_reward.to_string(), Style::default().fg(Color::Yellow)),
+            Line::from(vec![
+                Span::styled("Last Reward: ", Style::default().fg(color)),
+                Span::raw(self.last_reward.to_string()),
+                
             ]),
-            Spans::from(vec![
-                Span::raw("Last Timestamp: "),
-                Span::styled(self.last_timestamp.to_string(), Style::default().fg(Color::Yellow)),
+            Line::from(vec![
+                Span::styled("Last Timestamp: ", Style::default().fg(color)),
+                Span::raw(self.last_timestamp.to_string()),
             ]),
         ]
     }
