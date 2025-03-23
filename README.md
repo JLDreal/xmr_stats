@@ -2,7 +2,7 @@
 
 some fun statistics from the XMR chain
 
-````term
+```term
 ┌XMR───────────────────────────────────┐
 │Difficulty: 502695810755              │
 │Height: 3374086                       │
