@@ -1,12 +1,10 @@
-use serde::Deserialize;
-use reqwest::blocking::get;
-use std::error::Error;
 use ratatui::{
-    
-    style::{Color, Style}, text::{Line, Span},
-    
-    
+    style::{Color, Style},
+    text::{Line, Span},
 };
+use reqwest::blocking::get;
+use serde::Deserialize;
+use std::error::Error;
 
 #[derive(Deserialize, Debug)]
 pub struct Stats {
@@ -16,7 +14,10 @@ pub struct Stats {
     pub height: u64,
     #[serde(rename = "hashrate")]
     pub hashrate: f64,
-    #[serde(rename = "total_emission", deserialize_with = "deserialize_total_emission")]
+    #[serde(
+        rename = "total_emission",
+        deserialize_with = "deserialize_total_emission"
+    )]
     pub total_emission: u128,
     #[serde(rename = "last_reward")]
     pub last_reward: u64,
@@ -52,11 +53,9 @@ impl Stats {
     pub fn update(&mut self) -> Result<(), Box<dyn Error>> {
         let response = get("https://localmonero.co/blocks/api/get_stats")?;
         let raw_json = response.text()?;
-        
 
         // Deserialize the JSON into the Stats struct
         let stats: Stats = serde_json::from_str(&raw_json)?;
-        
 
         self.difficulty = stats.difficulty;
         self.height = stats.height;
@@ -77,7 +76,7 @@ impl Stats {
         println!("Last Reward: {}", self.last_reward);
         println!("Last Timestamp: {}", self.last_timestamp);
     }
-    
+
     pub fn to_spans(&self) -> Vec<Line> {
         let color = Color::Blue;
         vec![
@@ -88,22 +87,18 @@ impl Stats {
             Line::from(vec![
                 Span::styled("Height: ", Style::default().fg(color)),
                 Span::raw(self.height.to_string()),
-                
             ]),
             Line::from(vec![
                 Span::styled("Hashrate: ", Style::default().fg(color)),
                 Span::raw(format!("{:.2} Mh/s", self.hashrate)),
-                
             ]),
             Line::from(vec![
                 Span::styled("Total Emission: ", Style::default().fg(color)),
                 Span::raw(self.total_emission.to_string()),
-                
             ]),
             Line::from(vec![
                 Span::styled("Last Reward: ", Style::default().fg(color)),
                 Span::raw(self.last_reward.to_string()),
-                
             ]),
             Line::from(vec![
                 Span::styled("Last Timestamp: ", Style::default().fg(color)),
