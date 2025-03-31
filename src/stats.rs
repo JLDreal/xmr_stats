@@ -1,3 +1,4 @@
+use chrono::{Local, TimeZone, Utc};
 use ratatui::{
     style::{Color, Style},
     text::{Line, Span},
@@ -20,9 +21,9 @@ pub struct Stats {
     )]
     pub total_emission: u128,
     #[serde(rename = "last_reward")]
-    pub last_reward: u64,
+    pub last_reward: i64,
     #[serde(rename = "last_timestamp")]
-    pub last_timestamp: u64,
+    pub last_timestamp: i64,
 }
 
 // Custom deserialization function for total_emission
@@ -73,8 +74,8 @@ impl Stats {
         println!("Height: {}", self.height);
         println!("Hashrate: {:.2} H/s", self.hashrate);
         println!("Current Emission: {}", self.total_emission);
-        println!("Last Reward: {}", self.last_reward);
-        println!("Last Timestamp: {}", self.last_timestamp);
+        println!("Last Reward: {:#?}", self.last_reward);
+        println!("Last Timestamp: {:#?}", self.last_timestamp);
     }
 
     pub fn to_spans(&self) -> Vec<Line> {
@@ -98,11 +99,14 @@ impl Stats {
             ]),
             Line::from(vec![
                 Span::styled("Last Reward: ", Style::default().fg(color)),
-                Span::raw(self.last_reward.to_string()),
+                Span::raw(format!("{}", self.last_reward)),
             ]),
             Line::from(vec![
                 Span::styled("Last Timestamp: ", Style::default().fg(color)),
-                Span::raw(self.last_timestamp.to_string()),
+                Span::raw(format!(
+                    "{}",
+                    Utc.timestamp_opt(self.last_timestamp, 0).unwrap()
+                )),
             ]),
         ]
     }
